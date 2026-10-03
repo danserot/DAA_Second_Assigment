@@ -1,4 +1,4 @@
-package main.metrics;
+package main.java.engine.metrics;
 
 public class OperationMetrics {
 }
