@@ -310,18 +310,28 @@ public final class BenchmarkRunner {
             );
         }
 
-        // Проверяем все оставшиеся значения после измерения.
-        // Для списка удаление с головы позволяет избежать обхода по каждому индексу.
-        for (int expected : input.values()) {
-            if (sequence.remove(0) != expected) {
+        if (sequence instanceof DynamicArray) {
+            for (int i = 0; i < input.values().length; i++) {
+                if (sequence.get(i) != input.values()[i]) {
+                    throw new AssertionError(
+                            workload + ": original data was changed"
+                    );
+                }
+            }
+        } else {
+            for (int expected : input.values()) {
+                if (sequence.remove(0) != expected) {
+                    throw new AssertionError(
+                            workload + ": original data was changed"
+                    );
+                }
+            }
+
+            if (sequence.size() != 0) {
                 throw new AssertionError(
-                        workload + ": original data was changed"
+                        "Sequence was not fully drained"
                 );
             }
-        }
-
-        if (sequence.size() != 0) {
-            throw new AssertionError("Sequence was not fully drained");
         }
     }
 
